@@ -3,26 +3,39 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
+    <div id="mainPage">
+      <div id="titleContainer">
+        <h1 id="pageTitle">Twiddler</h1>
+        <p>A worse twitter</p>
+      </div>
+      <div id="tweetContainer">
+      </div>
+    </div>
+    
     <script>
 
       $(document).ready(function(){
         var $body = $('body');
-        $body.html('');
+        //$body.html('');
 
         var loadTweets = function() {
           var index = streams.home.length - 1;
           while(index >= 0){
             var tweet = streams.home[index];
-            var $tweet = $('<div></div>');
-            var $tweetTime = $('<div></div>');
+            var $tweet = $('<div class="tweet"></div>')
+            var $tweetMessage = $('<div class="tweetMessage"></div>');
+            var $tweetTime = $('<div class="tweetTime"></div>');
         
-            $tweet.text('@' + tweet.user + ': ' + tweet.message);
+            $tweetMessage.text('@' + tweet.user + ': ' + tweet.message);
             $tweetTime.text(tweet.created_at);
 
-            $tweet.appendTo($body);
-            $tweetTime.appendTo($body);
+            $('#tweetContainer').append($tweet);
+            $($tweet).append($tweetMessage);
+            $($tweet).append($tweetTime);
+
             index -= 1;
           }
         };
