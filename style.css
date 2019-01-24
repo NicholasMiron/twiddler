@@ -28,7 +28,27 @@
 }
 
 #tweetContainer {
+    width:60%;
+    background-color:white;
+    padding-top:20px;
+    margin: auto;
+}
+
+.tweet {
+    width:700px;
+    height:77px;
+    text-align: center;
+    margin:0 auto 0 auto;
+    border-top: 2px solid;
+    display:flex;
+    flex-flow: wrap;
+    align-items: center;
+}
+
+.tweetMessage, .tweetTime{
     width:100%;
-    background-color:lightcoral;
-    flex-wrap:wrap;
+}
+
+div.tweet:hover {
+    background-color: lightgray;
 }

@@ -28,8 +28,10 @@
             var $tweet = $('<div class="tweet"></div>')
             var $tweetMessage = $('<div class="tweetMessage"></div>');
             var $tweetTime = $('<div class="tweetTime"></div>');
+            var $user = tweet.user;
+            //$user.css("font-weight", "bold");
         
-            $tweetMessage.text('@' + tweet.user + ': ' + tweet.message);
+            $tweetMessage.html('<b>@' + $user + '</b>: ' + tweet.message);
             $tweetTime.text(tweet.created_at);
 
             $('#tweetContainer').append($tweet);
