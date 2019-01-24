@@ -12,7 +12,7 @@
         <p>A worse twitter</p>
       </div>
       <div id="buttonHouse">
-        <button name="newTwidd" onclick="newTweet()">New Twidd</button>
+        <button name="newTwidd" onclick="newTweet(tweetCount)">New Twidd</button>
       </div>
       <div id="tweetContainer">
       </div>
@@ -20,9 +20,9 @@
     
     <script>
 
-        var tweetCount = 11;
-        var newTweet = function() {
-          var tweet = streams.home[tweetCount];
+        var tweetCount = 0;
+        var newTweet = function(index) {
+          var tweet = streams.home[index];
           var $tweet = $('<div class="tweet"></div>');
           var $tweetMessage = $('<div class="tweetMessage"></div>');
           var $tweetTime = $('<div class="tweetTime"></div>');
@@ -39,25 +39,11 @@
         };
 
       $(document).ready(function(){
-        //var $body = $('body');
-        //$body.html('');
 
         var loadTweets = function() {
           var index = streams.home.length - 1;
           while(index >= 0){
-            var tweet = streams.home[index];
-            var $tweet = $('<div class="tweet"></div>');
-            var $tweetMessage = $('<div class="tweetMessage"></div>');
-            var $tweetTime = $('<div class="tweetTime"></div>');
-            var $user = tweet.user;
-        
-            $tweetMessage.html('<b>@' + $user + '</b>: ' + tweet.message);
-            $tweetTime.text(tweet.created_at);
-
-            $('#tweetContainer').append($tweet);
-            $($tweet).append($tweetMessage);
-            $($tweet).append($tweetTime);
-
+            newTweet(index);
             index -= 1;
           };
         };
