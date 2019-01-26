@@ -1,11 +1,13 @@
-* {
+html,body {
     margin:0px;
     padding:0px;
+    min-height:100%;
 }
 
 body {
     background-color:#eae3ef;
     color:#2b2a28;
+    position: relative;
 }
 
 #titleContainer {
@@ -32,6 +34,7 @@ body {
     background-color:white;
     padding:20px 0 20px 0;
     margin: auto;
+    border-radius: 10px;
 }
 
 .tweet {
@@ -58,6 +61,11 @@ div.tweet:hover {
     background-color: lightgray;
 }
 
+.tweet a {
+    text-decoration: none;
+    color:black;
+}
+
 #buttonHouse {
     display:flex;
     justify-content: center;
@@ -78,3 +86,4 @@ button:hover {
     color: #0b3a84;
     border:none;
 }
+
