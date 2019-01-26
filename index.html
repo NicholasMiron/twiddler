@@ -12,70 +12,67 @@
         <p>A worse twitter</p>
       </div>
       <div id="buttonHouse">
-        <input type="button" id="aButton" value="New Twidd" onclick="newTweet(streams, tweetCount)">
-        <!--<button id="aButton" onclick="newTweet(streams, tweetCount)">New Twidd</button>-->
+        <input type="button" id="aButton" value="New Twidd" onclick="getNewTweet()">
       </div>
       <div id="tweetContainer">
       </div>
     </div>
     
     <script>
+      //TODOs
+      //Style button element
+  
       var displayedTweets = []; //Tweets that have been loaded onto the page
       var inUserView = false; //Check for which view page is on (user tweets or all tweets);
 
-      var tweetCount = 0;
-      var newTweet = function(obj, index) {
-        var tweet = obj.home[index];
+      var getNewTweet = function() {
+        var newIndex = displayedTweets.length;
+        addTweetToPage(streams.home[newIndex].user, streams.home[newIndex].message, streams.home[newIndex].created_at);
+        displayedTweets.unshift(streams.home[newIndex]);
+      };
+
+      var addTweetToPage = function(user, message, time) {
         var $tweet = $('<div class="tweet"></div>');
         var $tweetMessage = $('<div class="tweetMessage"></div>');
         var $tweetTime = $('<div class="tweetTime"></div>');
-        var $user = tweet.user;
 
-        $tweetMessage.html('<b>@<a class="userClick"" href="#">' + $user + '</a></b><span>: ' + tweet.message + '</span');
-        $tweetTime.text(tweet.created_at);
+        $tweetMessage.html('<b>@<a class="userClick "" href="#">' + user + '</a></b><span>: ' + message + '</span');
+        $tweetTime.text(time);
 
         $('#tweetContainer').prepend($tweet);
         $($tweet).append($tweetMessage);
         $($tweet).append($tweetTime);
-        
-        displayedTweets.unshift({user:tweet.user, message:tweet.message, created_at:tweet.created_at});
-
-        tweetCount++;
       };
 
-      var frank = function() {return true};
+      var loadAllTweets = function() {
+        $('.tweet').remove();
+        for(var disIndex = displayedTweets.length - 1; disIndex >= 0; disIndex--) {
+          addTweetToPage(displayedTweets[disIndex].user, displayedTweets[disIndex].message, displayedTweets[disIndex].created_at);
+        }
+        $('#aButton').attr("value", "New Twidd");
+        $('#aButton').attr("onclick","getNewTweet()");
+        inUserView = false;
+      };
       
       //Show only user tweets
       $(document).on("click", ".userClick", function(val) {
         if(!inUserView) {
-          var user = $(val.target).text();
-          $('.tweet').remove(); 
-          var sortedTweets = {};
+          var user = $(val.target).text(); //Get target name
+          $('.tweet').remove(); //Remove existing tweets from page
+          var sortedTweets = {}; //Filter by target name
           sortedTweets.home = displayedTweets.filter(function(tweet) {
             return tweet.user === user;
           })
+          //Add filtered list to page
           for(var sortIndex = sortedTweets.home.length -1; sortIndex >=0; sortIndex--) {
             var tweet = sortedTweets.home[sortIndex];
-            var $tweet = $('<div class="tweet"></div>');
-            var $tweetMessage = $('<div class="tweetMessage"></div>');
-            var $tweetTime = $('<div class="tweetTime"></div>');
-            var $user = tweet.user;
-
-            $tweetMessage.html('<b>@<a class="clickable"" href="#">' + $user + '</a></b><span>: ' + tweet.message + '</span');
-            $tweetTime.text(tweet.created_at);
-
-            $('#tweetContainer').prepend($tweet);
-            $($tweet).append($tweetMessage);
-            $($tweet).append($tweetTime);
+            addTweetToPage(tweet.user, tweet.message, tweet.created_at);
           }
+          //Change button to go back to all tweet view
+          $('#aButton').attr("value", "All Twidds");
+          $('#aButton').attr("onclick","loadAllTweets()");
           inUserView = true;
         }
-      });
-
-      //Change button text and function
-      $('#aButton').click(function() {
-        this.value = "hello";
-        $('#aButton').attr("onclick","frank");
       });
     
       $(document).ready(function(){
@@ -83,8 +80,8 @@
         var loadTweets = function() {
           var index = streams.home.length - 1;
           while(index >= 0){
-            newTweet(streams, index);
-            index -= 1;
+            getNewTweet();
+            index--;
           };
         };
         loadTweets();
