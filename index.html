@@ -13,8 +13,9 @@
         <p>A worse twitter</p>
       </div>
       <div id="buttonHouse">
-        <input type="button" id="aButton" value="Random Twidd" onclick="getNewTweet()">
-        <input type="button" id="bButton" value="Make a Twidd" onclick="userTweet()">
+        <input type="button" id="aButton" value="Random Twidd">
+        <input type="button" id="bButton" value="Make a Twidd">
+        <input type="button" id="cButton" value="All Twidds">
         <form id="tweetInput" name="tweetInput" autocomplete="off">
           <input type="text" id="tweetUser" placeholder="What's your name?" maxlength="20" pattern=".{3,}" required title="3 characters minimum">
           <textarea id="tweetMessage" rows="3" cols="52" placeholder="Enter new twidd here..." maxlength="141" patter=".{1,}" required title="1 characters minimum"></textarea>
@@ -27,89 +28,112 @@
     </div>
     
     <script>
-      var displayedTweets = []; //Tweets that have been loaded onto the page
-      var inUserView = false; //Check for which view page is on (user tweets or all tweets);
-
-      var getNewTweet = function() {
-        var newIndex = displayedTweets.length;
-        addTweetToPage(streams.home[newIndex].user, streams.home[newIndex].message, streams.home[newIndex].created_at);
-        displayedTweets.unshift(streams.home[newIndex]);
-      };
-
-      var addTweetToPage = function(user, message, time) {
-        var $tweet = $('<div class="tweet"></div>');
-        var $tweetMessage = $('<div class="tweetMessage"></div>');
-        var $tweetTime = $('<div class="tweetTime"></div>');
-
-        $tweetMessage.html('<b>@<a class="userClick "" href="#">' + user + '</a></b><span>: ' + message + '</span');
-        $tweetTime.text(time);
-
-        $('#tweetContainer').prepend($tweet);
-        $($tweet).append($tweetMessage);
-        $($tweet).append($tweetTime);
-      };
-
-      var loadAllTweets = function() {
-        $('.tweet').remove();
-        for(var disIndex = displayedTweets.length - 1; disIndex >= 0; disIndex--) {
-          addTweetToPage(displayedTweets[disIndex].user, displayedTweets[disIndex].message, displayedTweets[disIndex].created_at);
-        }
-        $('#aButton').attr("value", "Random Twidd");
-        $('#aButton').attr("onclick","getNewTweet()");
-        $('#bButton').show();
-        inUserView = false;
-      };
-
-      //Get user Tweet
-      var userTweet = function() {
-        $('#aButton').hide();
-        $('#bButton').hide();
-        $('form[name="tweetInput"]').show();
-      }
-
-      //Add submited tweet to page
-      $('#tweetInput').submit(function() {
-        var $inputs = $('#tweetInput :input');
-        $('#aButton').show();
-        $('#bButton').show();
-        $('form[name="tweetInput"]').hide();
-        addTweetToPage($inputs[0].value, $inputs[1].value, new Date($.now()));
-        $('#tweetInput').get(0).reset();
-      });
       
-      //Show only user tweets
-      $(document).on("click", ".userClick", function(val) {
-        if(!inUserView) {
-          var user = $(val.target).text(); //Get target name
-          $('.tweet').remove(); //Remove existing tweets from page
-          var sortedTweets = {}; //Filter by target name
-          sortedTweets.home = displayedTweets.filter(function(tweet) {
-            return tweet.user === user;
-          })
-          //Add filtered list to page
-          for(var sortIndex = sortedTweets.home.length -1; sortIndex >=0; sortIndex--) {
-            var tweet = sortedTweets.home[sortIndex];
-            addTweetToPage(tweet.user, tweet.message, tweet.created_at);
-          }
-          //Change button to go back to all tweet view
-          $('#aButton').attr("value", "All Twidds");
-          $('#aButton').attr("onclick","loadAllTweets()");
-          $('#bButton').hide();
-          inUserView = true;
-        }
-      });
-
-      //Go back from manual input
-      $(document).on("click", "#goBack", function() {
-        $('#aButton').show();
-        $('#bButton').show();
-        $('form[name="tweetInput"]').hide();
-        $('#tweetInput').get(0).reset();
-      })
     
       $(document).ready(function(){
         $('form[name="tweetInput"]').hide(); 
+        $('#cButton').hide();
+        var displayedTweets = []; //Tweets that have been loaded onto the page
+        var inUserView = false; //Check for which view page is on (user tweets or all tweets);
 
+        //Get new tweets from data generator
+        var getNewTweet = function() {
+          var newIndex = displayedTweets.length;
+          addTweetToPage(streams.home[newIndex].user, streams.home[newIndex].message, streams.home[newIndex].created_at);
+          displayedTweets.unshift(streams.home[newIndex]);
+        };
+
+        //Add passed in tweet to page
+        var addTweetToPage = function(user, message, time) {
+          var $tweet = $('<div class="tweet"></div>');
+          var $tweetMessage = $('<div class="tweetMessage"></div>');
+          var $tweetTime = $('<div class="tweetTime"></div>');
+
+          $tweetMessage.html('<b>@<a class="userClick "" href="#">' + user + '</a></b><span>: ' + message + '</span');
+          $tweetTime.text(time);
+
+          $('#tweetContainer').prepend($tweet);
+          $($tweet).append($tweetMessage);
+          $($tweet).append($tweetTime);
+        };
+
+        //Add all tweets previously loaded onto page into page
+        var loadAllTweets = function() {
+          $('.tweet').remove();
+          for(var disIndex = displayedTweets.length - 1; disIndex >= 0; disIndex--) {
+            addTweetToPage(displayedTweets[disIndex].user, displayedTweets[disIndex].message, displayedTweets[disIndex].created_at);
+          }
+          $('#aButton').attr("value", "Random Twidd");
+          $('#aButton').attr("onclick","getNewTweet()");
+          $('#bButton').show();
+          inUserView = false;
+        };
+
+        //Get user Tweet
+        var showUserForm = function() {
+          $('#aButton').hide();
+          $('#bButton').hide();
+          $('form[name="tweetInput"]').show();
+        }
+
+        //Add submited tweet to page
+        $('#tweetInput').submit(function() {
+          var $inputs = $('#tweetInput :input');
+          displayedTweets.unshift({user:$inputs[0].value, message:$inputs[1].value, created_at:new Date($.now())});
+          $('#aButton').show();
+          $('#bButton').show();
+          $('form[name="tweetInput"]').hide();
+          addTweetToPage($inputs[0].value, $inputs[1].value, new Date($.now()));
+          $('#tweetInput').get(0).reset();
+        });
+        
+        //Show only user tweets
+        $(document).on("click", ".userClick", function(val) {
+          if(!inUserView) {
+            var user = $(val.target).text(); //Get target name
+            $('.tweet').remove(); //Remove existing tweets from page
+            var sortedTweets = {}; //Filter by target name
+            sortedTweets.home = displayedTweets.filter(function(tweet) {
+              return tweet.user === user;
+            })
+            //Add filtered list to page
+            for(var sortIndex = sortedTweets.home.length -1; sortIndex >=0; sortIndex--) {
+              var tweet = sortedTweets.home[sortIndex];
+              addTweetToPage(tweet.user, tweet.message, tweet.created_at);
+            }
+            //Change button to go back to all tweet view
+            //$('#aButton').attr("value", "All Twidds");
+            //$('#aButton').attr("onclick","loadAllTweets()");
+            $('#aButton').hide();
+            $('#bButton').hide();
+            $('#cButton').show();
+            inUserView = true;
+          }
+        });
+
+        //Load new random tweet
+        $("input[id='aButton']").click(getNewTweet);
+
+        //Load form for new tweet
+        $('input[id="bButton"]').click(showUserForm);
+
+        //Load all tweets back to page
+        $('input[id="cButton"]').click(function() {
+          $('#cButton').hide();
+          $('#aButton').show();
+          $('#bButton').show();
+          loadAllTweets();
+        });
+
+        //Go back from manual input
+        $(document).on("click", "#goBack", function() {
+          $('#aButton').show();
+          $('#bButton').show();
+          $('form[name="tweetInput"]').hide();
+          $('#tweetInput').get(0).reset();
+        });
+
+        //Load inital tweets to page
         var loadTweets = function() {
           var index = streams.home.length - 1;
           while(index >= 0){
@@ -118,7 +142,7 @@
           };
         };
         loadTweets();
-
+        
       });
     </script>
   </body>
