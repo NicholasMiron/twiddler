@@ -4,6 +4,7 @@
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
   </head>
   <body>
     <div id="mainPage">
@@ -12,16 +13,20 @@
         <p>A worse twitter</p>
       </div>
       <div id="buttonHouse">
-        <input type="button" id="aButton" value="New Twidd" onclick="getNewTweet()">
+        <input type="button" id="aButton" value="Random Twidd" onclick="getNewTweet()">
+        <input type="button" id="bButton" value="Make a Twidd" onclick="userTweet()">
+        <form id="tweetInput" name="tweetInput" autocomplete="off">
+          <input type="text" id="tweetUser" placeholder="What's your name?" maxlength="20" pattern=".{3,}" required title="3 characters minimum">
+          <textarea id="tweetMessage" rows="3" cols="52" placeholder="Enter new twidd here..." maxlength="141" patter=".{1,}" required title="1 characters minimum"></textarea>
+          <input type="button" id="goBack" value="Back">
+          <input type="submit" id="tweetSubmit">
+        </form>
       </div>
       <div id="tweetContainer">
       </div>
     </div>
     
     <script>
-      //TODOs
-      //Style button element
-  
       var displayedTweets = []; //Tweets that have been loaded onto the page
       var inUserView = false; //Check for which view page is on (user tweets or all tweets);
 
@@ -49,10 +54,28 @@
         for(var disIndex = displayedTweets.length - 1; disIndex >= 0; disIndex--) {
           addTweetToPage(displayedTweets[disIndex].user, displayedTweets[disIndex].message, displayedTweets[disIndex].created_at);
         }
-        $('#aButton').attr("value", "New Twidd");
+        $('#aButton').attr("value", "Random Twidd");
         $('#aButton').attr("onclick","getNewTweet()");
+        $('#bButton').show();
         inUserView = false;
       };
+
+      //Get user Tweet
+      var userTweet = function() {
+        $('#aButton').hide();
+        $('#bButton').hide();
+        $('form[name="tweetInput"]').show();
+      }
+
+      //Add submited tweet to page
+      $('#tweetInput').submit(function() {
+        var $inputs = $('#tweetInput :input');
+        $('#aButton').show();
+        $('#bButton').show();
+        $('form[name="tweetInput"]').hide();
+        addTweetToPage($inputs[0].value, $inputs[1].value, new Date($.now()));
+        $('#tweetInput').get(0).reset();
+      });
       
       //Show only user tweets
       $(document).on("click", ".userClick", function(val) {
@@ -71,11 +94,21 @@
           //Change button to go back to all tweet view
           $('#aButton').attr("value", "All Twidds");
           $('#aButton').attr("onclick","loadAllTweets()");
+          $('#bButton').hide();
           inUserView = true;
         }
       });
+
+      //Go back from manual input
+      $(document).on("click", "#goBack", function() {
+        $('#aButton').show();
+        $('#bButton').show();
+        $('form[name="tweetInput"]').hide();
+        $('#tweetInput').get(0).reset();
+      })
     
       $(document).ready(function(){
+        $('form[name="tweetInput"]').hide(); 
 
         var loadTweets = function() {
           var index = streams.home.length - 1;

@@ -2,6 +2,7 @@ html,body {
     margin:0px;
     padding:0px;
     min-height:100%;
+    font-family: 'PT Sans', sans-serif;
 }
 
 body {
@@ -25,8 +26,7 @@ body {
     align-self:center;
     width:100%;
     text-align:center;
-    padding:15px 0 0px 0;
-    margin-bottom:-20px;
+    margin:20px 0 -10px 0;
 }
 
 #tweetContainer {
@@ -35,6 +35,7 @@ body {
     padding:20px 0 20px 0;
     margin: auto;
     border-radius: 10px;
+    margin-bottom:20px;
 }
 
 .tweet {
@@ -44,9 +45,13 @@ body {
     border-top: 2px solid;
     display:flex;
     flex-flow: wrap;
+    flex-wrap: wrap;
     align-items: center;
     font-size: 22px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
+
 
 .tweet:last-child {
     border-bottom:2px solid;
@@ -68,22 +73,82 @@ div.tweet:hover {
 
 #buttonHouse {
     display:flex;
-    justify-content: center;
+    justify-content:center;
+    align-items:center;
     margin-bottom:15px;
 }
 
-button {
+input[type="button"] {
     font-size: 24px;
     background-color: #0b3a84;
     color:white;
     border-radius: 10px;
     padding:10px 15px 10px 15px;
     border:none;
+    outline:none;
+    margin:0 15px 0 15px;
 }
 
-button:hover {
-    background-color:white;
-    color: #0b3a84;
+input[type="button"]:hover {
+    background-color:rgb(77, 61, 226);
+    color: black;
     border:none;
+    outline:none;
 }
 
+form {
+    display:flex;
+    width:700px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap:wrap;
+}
+
+input[type="text"] {
+    font-size: 24px;
+    background-color: #0b3a84;
+    color:white;
+    border-radius: 5px;
+    border:none;
+    outline:none;
+    width: 225px;
+    text-align: center;
+    margin: 20px 0 10px 0;
+}
+
+#tweetMessage {
+    font-size: 24px;
+    background-color: #0b3a84;
+    color: white;
+    border-radius:5px;
+    border:none;
+    outline:none;
+    resize: none;
+    margin:10px 0 20px 0;
+}
+
+#goBack {
+    font-size:20px;
+    background-color: #bb3030;
+    border-radius: 5px;
+    color:black;
+    width: 100px;
+    height: 25px;
+    padding: 0;
+}
+
+#goBack:hover {
+    background-color: #a01919;
+}
+
+#tweetSubmit {
+    font-size: 20px;
+    background-color: #88d14d;
+    border-radius: 5px;
+    width:100px;
+    height:25px;
+}
+
+#tweetSubmit:hover {
+    background-color: #579e1c;
+}
